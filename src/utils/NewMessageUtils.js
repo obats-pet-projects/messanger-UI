@@ -1,8 +1,11 @@
 import * as Yup from 'yup';
 
-const NewMessageSchema = Yup.object().shape({
+export const NewMessageSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
-  description: Yup.string().required('Required')
+  message: Yup.string().required('Required')
 });
 
-export default NewMessageSchema;
+export const initialValues = {
+  title: '',
+  message: ''
+};

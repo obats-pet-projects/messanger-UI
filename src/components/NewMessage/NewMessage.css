@@ -1,3 +1,25 @@
-.new-message-container {
-  display: flex;
+.fieldset {
+  border: 0;
+  padding: 0;
+}
+
+.custom-label {
+  display: block;
+  padding-bottom: 5px;
+  font-size: 14px;
+}
+
+.title-input,
+.message-textarea {
+  min-width: 250px;
+  max-width: 250px;
+  font-size: 16px;
+}
+
+.title-input {
+  height: 30px;
+}
+
+.message-textarea {
+  height: 150px;
 }
