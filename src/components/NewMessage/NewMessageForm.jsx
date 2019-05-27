@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { NewMessageSchema, initialValues } from '../../utils/NewMessageUtils';
 import './NewMessage.css';
 
@@ -8,13 +8,7 @@ const onSubmitClick = (values, actions) => {
 };
 
 const NewMessageForm = props => {
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    isValid,
-    isSubmitting
-  } = props;
+  const { handleChange, handleBlur, handleSubmit, isValid, isSubmitting } = props;
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -31,6 +25,7 @@ const NewMessageForm = props => {
             onBlur={handleBlur}
             className="title-input"
           />
+          <ErrorMessage name="title" />
         </p>
         <p>
           <label htmlFor="message-field" className="custom-label">
@@ -44,6 +39,7 @@ const NewMessageForm = props => {
             className="message-textarea"
           />
         </p>
+        <ErrorMessage name="message" />
       </fieldset>
 
       <button type="submit" disabled={isSubmitting || !isValid}>
