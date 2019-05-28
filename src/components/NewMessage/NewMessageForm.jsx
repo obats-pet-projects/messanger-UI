@@ -1,10 +1,11 @@
 import React from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
+import axios from '../../api/axios';
 import { NewMessageSchema, initialValues } from '../../utils/NewMessageUtils';
 import './NewMessage.css';
 
 const onSubmitClick = (values, actions) => {
-  console.log('Button pressed');
+  axios.post('/create-message', values).then(res => console.log(res));
 };
 
 const NewMessageForm = props => {
@@ -25,8 +26,8 @@ const NewMessageForm = props => {
             onBlur={handleBlur}
             className="title-input"
           />
-          <ErrorMessage name="title" />
         </p>
+        <ErrorMessage name="title" />
         <p>
           <label htmlFor="message-field" className="custom-label">
             Message
