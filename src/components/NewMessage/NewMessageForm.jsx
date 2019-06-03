@@ -1,64 +1,77 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import axios from '../../api/axios';
 import { NewMessageSchema, initialValues } from '../../utils/NewMessageUtils';
 import './NewMessage.css';
 
-const onSubmitClick = (values, actions) => {
-  axios.post('/create-message', values).then(res => console.log(res));
-};
+class NewMessageForm extends Component {
+  state = {
+    isSend: false
+  };
 
-const NewMessageForm = props => {
-  const { handleChange, handleBlur, handleSubmit, isValid, isSubmitting } = props;
+  onSubmitClick = (values, actions) => {
+    axios.post('/messages', values).then(() => {
+      this.setState({ isSend: true });
+      actions.resetForm({});
+    });
+  };
 
-  return (
-    <Form onSubmit={handleSubmit}>
-      <fieldset className="fieldset">
-        <p>
-          <label htmlFor="title-field" className="custom-label">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            id="title-field"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="title-input"
-          />
-        </p>
-        <ErrorMessage name="title" />
-        <p>
-          <label htmlFor="message-field" className="custom-label">
-            Message
-          </label>
-          <textarea
-            name="message"
-            id="message-field"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className="message-textarea"
-          />
-        </p>
-        <ErrorMessage name="message" />
-      </fieldset>
+  render() {
+    const { isSend } = this.state;
 
-      <button type="submit" disabled={isSubmitting || !isValid}>
-        Send Message
-      </button>
-    </Form>
-  );
-};
+    const NewMessageView = props => {
+      const { values, handleChange, handleBlur, handleSubmit, isValid, isSubmitting } = props;
 
-const NewMessage = () => {
-  return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={NewMessageSchema}
-      onSubmit={onSubmitClick}
-      render={NewMessageForm}
-    />
-  );
-};
+      return (
+        <Form onSubmit={handleSubmit}>
+          <fieldset className="fieldset">
+            <p>
+              <label htmlFor="subject-field" className="custom-label">
+                Subject
+              </label>
+              <input
+                type="text"
+                name="subject"
+                id="subject-field"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.subject || ''}
+                className="subject-input"
+              />
+            </p>
+            <ErrorMessage name="subject" />
+            <p>
+              <label htmlFor="message-field" className="custom-label">
+                Message
+              </label>
+              <textarea
+                name="message"
+                id="message-field"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.message || ''}
+                className="message-textarea"
+              />
+            </p>
+            <ErrorMessage name="message" />
+          </fieldset>
 
-export default NewMessage;
+          <button type="submit" disabled={isSubmitting || !isValid}>
+            Send Message
+          </button>
+          {isSend && <div>Message sent</div>}
+        </Form>
+      );
+    };
+    return (
+      <Formik
+        initialValues={initialValues}
+        validationSchema={NewMessageSchema}
+        onSubmit={this.onSubmitClick}
+        render={NewMessageView}
+      />
+    );
+  }
+}
+
+export default NewMessageForm;
