@@ -6,12 +6,22 @@ import {
   ListItemText,
   Checkbox
 } from '@material-ui/core/';
+
+import Loader from '../../utils/Loader/Loader';
 import './css/MessageList.css';
+import { Link } from 'react-router-dom';
 
 const MessagesList = ({ isLoading, messages }) => {
   const [checked, setChecked] = useState([]);
 
-  const handleToggle = id => () => {
+  const handleLinkClick = evt => {
+    console.log(evt.target.nodeName);
+    if (evt.target.nodeName === 'INPUT') {
+      evt.preventDefault();
+    }
+  };
+
+  const handleToggle = id => {
     const currentIndex = checked.indexOf(id);
     let newChecked = [...checked];
 
@@ -27,19 +37,33 @@ const MessagesList = ({ isLoading, messages }) => {
   return (
     <section className="container">
       <List className="message-list">
-        {!isLoading &&
+        {isLoading ? (
+          <Loader />
+        ) : messages.length > 0 ? (
           messages.map(message => (
-            <ListItem key={message.id} button alignItems="flex-start">
-              <ListItemText primary={message.subject} />
-              <ListItemSecondaryAction>
-                <Checkbox
-                  edge="start"
-                  onChange={handleToggle(message.id)}
-                  checked={checked.indexOf(message.id) !== -1}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+            <Link
+              key={message.id}
+              to={message.id}
+              className="message-item"
+              onClick={handleLinkClick}
+            >
+              <ListItem>
+                <ListItemText primary={message.subject} />
+                <ListItemSecondaryAction>
+                  <Checkbox
+                    edge="start"
+                    onChange={() => handleToggle(message.id)}
+                    checked={checked.indexOf(message.id) !== -1}
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+            </Link>
+          ))
+        ) : (
+          <div>
+            <h4 className="empty-messages">No messages in this category</h4>
+          </div>
+        )}
       </List>
     </section>
   );
