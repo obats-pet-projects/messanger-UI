@@ -1,12 +1,14 @@
-import React from 'react';
-import NewMessageForm from '../NewMessage/NewMessageForm';
+import React, { Fragment } from 'react';
+import MessagesContainer from '../Messages/MessageContainer';
 import './HomePage.css';
+import Header from '../Header/Header';
 
 const HomePage = () => {
   return (
-    <div className="homepage-container">
-      <NewMessageForm />
-    </div>
+    <Fragment>
+      <Header />
+      <MessagesContainer />
+    </Fragment>
   );
 };
 
