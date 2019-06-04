@@ -1,0 +1,16 @@
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 0;
+  width: 2px;
+  height: calc(100% - 16px);
+  background-color: #ddd;
+}
