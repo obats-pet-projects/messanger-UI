@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
-import MessageView from './components/Messages/MessageView';
+import MessageView from './components/Message/View/View';
 
 const Routes = () => {
   return (

@@ -7,8 +7,8 @@ import {
   Checkbox
 } from '@material-ui/core/';
 
-import Loader from '../../utils/Loader/Loader';
-import './css/MessageList.css';
+import Loader from '../../UI/Loader/Loader';
+import './List.css';
 import { Link } from 'react-router-dom';
 
 const MessagesList = ({ isLoading, messages }) => {

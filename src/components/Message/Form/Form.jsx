@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import axios from '../../api/axios';
-import { NewMessageSchema, initialValues } from '../../utils/NewMessageUtils';
+import { messageSchema, initialValues } from './Validation';
 import './NewMessage.css';
 
 class NewMessageForm extends Component {
@@ -66,7 +66,7 @@ class NewMessageForm extends Component {
     return (
       <Formik
         initialValues={initialValues}
-        validationSchema={NewMessageSchema}
+        validationSchema={messageSchema}
         onSubmit={this.onSubmitClick}
         render={NewMessageView}
       />

@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import Header from '../Header/Header';
-import MessageSidebar from './MessageSidebar';
-import axios from '../../api/axios';
-import './css/MessageContainer.css';
-import './css/MessageView.css';
+import Header from '../../Header/Header';
+import MessageSidebar from '../Sidebar/Sidebar';
+import axios from '../../../api/axios';
+import '../Container/Container.css';
+import '../View/View.css';
 
 const MessageView = props => {
   const { id } = props.match.params;
