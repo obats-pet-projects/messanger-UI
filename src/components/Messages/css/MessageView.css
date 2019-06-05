@@ -1,0 +1,10 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 0 10px;
+}
+
+.message-subject {
+  font-size: 20px;
+}

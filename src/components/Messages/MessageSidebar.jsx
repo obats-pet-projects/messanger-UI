@@ -12,7 +12,7 @@ const MessageSidebar = ({ fetchMessages }) => (
         component="button"
         value="inbox"
         button
-        onClick={e => fetchMessages(e.currentTarget.value)}
+        onClick={evt => fetchMessages(evt.currentTarget.value)}
       >
         <ListItemIcon>
           <InboxIcon />
@@ -23,7 +23,7 @@ const MessageSidebar = ({ fetchMessages }) => (
         component="button"
         value="social"
         button
-        onClick={e => fetchMessages(e.currentTarget.value)}
+        onClick={evt => fetchMessages(evt.currentTarget.value)}
       >
         <ListItemIcon>
           <PeopleIcon />
@@ -34,7 +34,7 @@ const MessageSidebar = ({ fetchMessages }) => (
         component="button"
         value="advertisement"
         button
-        onClick={e => fetchMessages(e.currentTarget.value)}
+        onClick={evt => fetchMessages(evt.currentTarget.value)}
       >
         <ListItemIcon>
           <DraftsIcon />
@@ -45,7 +45,7 @@ const MessageSidebar = ({ fetchMessages }) => (
         component="button"
         value="spam"
         button
-        onClick={e => fetchMessages(e.currentTarget.value)}
+        onClick={evt => fetchMessages(evt.currentTarget.value)}
       >
         <ListItemIcon>
           <DraftsIcon />

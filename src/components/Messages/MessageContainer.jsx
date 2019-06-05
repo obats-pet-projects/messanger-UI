@@ -10,7 +10,7 @@ const MessagesContainer = () => {
 
   const fetchMessages = (category = 'inbox') => {
     axios
-      .get(`/messages/${category}`)
+      .get(`/messages/category/${category}`)
       .then(res => {
         setMessages(res.data);
         setLoading(false);
@@ -20,8 +20,6 @@ const MessagesContainer = () => {
 
   useEffect(() => {
     fetchMessages();
-
-    return () => fetchMessages();
   }, []);
 
   return (

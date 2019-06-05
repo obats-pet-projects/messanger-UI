@@ -6,3 +6,23 @@
 .message-list {
   width: 100%;
 }
+
+.message-item {
+  display: block;
+  text-decoration: none;
+}
+
+.message-item:link,
+.message-item:visited {
+  color: inherit;
+}
+
+.message-item:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.empty-messages {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.4);
+}
