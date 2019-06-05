@@ -6,7 +6,6 @@ import './css/MessageContainer.css';
 import './css/MessageView.css';
 
 const MessageView = props => {
-  console.log(props);
   const { id } = props.match.params;
 
   const [message, setMessage] = useState([]);

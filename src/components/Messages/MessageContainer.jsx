@@ -20,8 +20,6 @@ const MessagesContainer = () => {
 
   useEffect(() => {
     fetchMessages();
-
-    return () => fetchMessages();
   }, []);
 
   return (
