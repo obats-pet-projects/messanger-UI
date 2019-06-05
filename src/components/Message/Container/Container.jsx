@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import MessageSidebar from './MessageSidebar';
-import MessageList from './MessageList';
-import axios from '../../api/axios';
-import './css/MessageContainer.css';
+import MessageSidebar from '../Sidebar/Sidebar';
+import MessageList from '../List/List';
+import axios from '../../../api/axios.js';
+import './Container.css';
 
-const MessagesContainer = () => {
+const MessageContainer = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -30,4 +30,4 @@ const MessagesContainer = () => {
   );
 };
 
-export default MessagesContainer;
+export default MessageContainer;

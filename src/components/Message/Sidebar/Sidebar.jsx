@@ -3,7 +3,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import PeopleIcon from '@material-ui/icons/People';
-import './css/MessageSidebar.css';
+import './Sidebar.css';
 
 const MessageSidebar = ({ fetchMessages }) => (
   <aside className="sidebar">
