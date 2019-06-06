@@ -5,7 +5,7 @@ import labelList from './labels.js';
 import './Sidebar.css';
 
 const MessageSidebar = ({ fetchMessages }) => (
-  <aside className="sidebar">
+  <div className="sidebar">
     <List component="nav">
       <ul className="sidebar-list">
         {labelList.map((label, index) => (
@@ -23,7 +23,7 @@ const MessageSidebar = ({ fetchMessages }) => (
         ))}
       </ul>
     </List>
-  </aside>
+  </div>
 );
 
 export default MessageSidebar;
