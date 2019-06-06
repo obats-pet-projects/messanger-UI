@@ -31,25 +31,25 @@ const MessagesList = ({ isLoading, messages }) => {
   };
 
   return (
-    <section className="container">
+    <div className="messages-container">
       <List className="message-list">
         {isLoading ? (
           <Loader />
         ) : messages.length > 0 ? (
           messages.map(message => (
-            <Link
-              key={message.id}
-              to={`/${message.id}`}
-              className="message-item"
-              onClick={evt => handleCheckboxClick(evt, message.id)}
-            >
-              <ListItem>
+            <ListItem className="message-item">
+              <Link
+                key={message.id}
+                to={`/${message.id}`}
+                className="message-link"
+                onClick={evt => handleCheckboxClick(evt, message.id)}
+              >
                 <ListItemText primary={message.subject} />
                 <ListItemSecondaryAction>
-                  <Checkbox edge="start" checked={checked.indexOf(message.id) !== -1} />
+                  <Checkbox color="primary" checked={checked.indexOf(message.id) !== -1} />
                 </ListItemSecondaryAction>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
           ))
         ) : (
           <div>
@@ -57,7 +57,7 @@ const MessagesList = ({ isLoading, messages }) => {
           </div>
         )}
       </List>
-    </section>
+    </div>
   );
 };
 
