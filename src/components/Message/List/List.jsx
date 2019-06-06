@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   List,
   ListItem,
@@ -6,32 +7,27 @@ import {
   ListItemText,
   Checkbox
 } from '@material-ui/core/';
-
 import Loader from '../../UI/Loader/Loader';
 import './List.css';
-import { Link } from 'react-router-dom';
 
 const MessagesList = ({ isLoading, messages }) => {
   const [checked, setChecked] = useState([]);
 
-  const handleLinkClick = evt => {
-    console.log(evt.target.nodeName);
+  const handleCheckboxClick = (evt, id) => {
     if (evt.target.nodeName === 'INPUT') {
       evt.preventDefault();
+
+      const currentIndex = checked.indexOf(id);
+      let newChecked = [...checked];
+
+      if (currentIndex === -1) {
+        newChecked = [...newChecked, id];
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+
+      setChecked(newChecked);
     }
-  };
-
-  const handleToggle = id => {
-    const currentIndex = checked.indexOf(id);
-    let newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked = [...newChecked, id];
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
   };
 
   return (
@@ -43,18 +39,14 @@ const MessagesList = ({ isLoading, messages }) => {
           messages.map(message => (
             <Link
               key={message.id}
-              to={message.id}
+              to={`/${message.id}`}
               className="message-item"
-              onClick={handleLinkClick}
+              onClick={evt => handleCheckboxClick(evt, message.id)}
             >
               <ListItem>
                 <ListItemText primary={message.subject} />
                 <ListItemSecondaryAction>
-                  <Checkbox
-                    edge="start"
-                    onChange={() => handleToggle(message.id)}
-                    checked={checked.indexOf(message.id) !== -1}
-                  />
+                  <Checkbox edge="start" checked={checked.indexOf(message.id) !== -1} />
                 </ListItemSecondaryAction>
               </ListItem>
             </Link>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import axios from '../../api/axios';
-import { messageSchema, initialValues } from './Validation';
+import { messageSchema, initialValues } from './validation';
 import './NewMessage.css';
 
 class NewMessageForm extends Component {
