@@ -4,13 +4,19 @@ import MessageList from '../List/List';
 import axios from '../../../api/axios.js';
 import './Container.css';
 
-const MessageContainer = () => {
+const MessageContainer = props => {
+  let category;
+
+  if (props.location) {
+    category = props.location.search.substring(props.location.search.indexOf('=') + 1);
+  }
+
   const [messages, setMessages] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   const fetchMessages = (category = 'inbox') => {
     axios
-      .get(`/messages/category/${category}`)
+      .get(`/messages/mail/category/?category=${category}`)
       .then(res => {
         setMessages(res.data);
         setLoading(false);
@@ -19,8 +25,8 @@ const MessageContainer = () => {
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    fetchMessages(category);
+  }, [category]);
 
   return (
     <main className="container">

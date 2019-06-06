@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import Header from '../../Header/Header';
 import MessageSidebar from '../Sidebar/Sidebar';
 import axios from '../../../api/axios';
 import '../Container/Container.css';
@@ -21,7 +20,6 @@ const MessageView = props => {
 
   return (
     <Fragment>
-      <Header />
       <main className="container">
         <MessageSidebar />
         <section className="message">
