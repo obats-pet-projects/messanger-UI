@@ -10,9 +10,9 @@
   position: absolute;
   top: 8px;
   right: 0;
-  width: 2px;
+  width: 1px;
   height: calc(100% - 16px);
-  background-color: #ddd;
+  background-color: rgba(100, 121, 143, 0.122);
 }
 
 .sidebar-list {
