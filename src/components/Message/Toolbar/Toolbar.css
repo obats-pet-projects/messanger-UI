@@ -1,6 +1,5 @@
 .toolbar-container {
   position: relative;
-  /* height: 50px; */
 }
 
 .toolbar-container::before {
@@ -11,4 +10,9 @@
   width: calc(100% - 16px);
   height: 1px;
   background-color: rgba(100, 121, 143, 0.122);
+}
+
+.tooltip-action {
+  width: 48px;
+  height: 48px;
 }

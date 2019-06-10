@@ -16,15 +16,24 @@ const MessageList = ({ category }) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [checkedMessages, setCheckedMessages] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleTooltipActionClick = () => {
     const filteredMessages = messages.filter(message => !checkedMessages.includes(message.id));
 
     setMessages(filteredMessages);
+    setIsChecked(false);
+    setCheckedMessages('');
   };
 
   const handleSelectAllCheckbox = evt => {
-    if (evt.target.checked) {
+    const checked = evt.currentTarget.checked ? true : false;
+
+    if (messages.length > 0) {
+      setIsChecked(checked);
+    }
+
+    if (checked) {
       messages.map(message => setCheckedMessages(prevState => [...prevState, message.id]));
     } else {
       setCheckedMessages('');
@@ -44,6 +53,10 @@ const MessageList = ({ category }) => {
         newChecked.splice(currentIndex, 1);
       }
 
+      const isAllChecked = newChecked.length === messages.length ? true : false;
+
+      setIsChecked(isAllChecked);
+
       setCheckedMessages(newChecked);
     }
   };
@@ -59,6 +72,8 @@ const MessageList = ({ category }) => {
   };
 
   useEffect(() => {
+    setIsChecked(false);
+    setCheckedMessages('');
     fetchMessages(category);
   }, [category]);
 
@@ -67,8 +82,9 @@ const MessageList = ({ category }) => {
       <Toolbar
         handleTooltipActionClick={handleTooltipActionClick}
         checkedMessages={checkedMessages}
-        messages={messages}
         handleSelectAllCheckbox={handleSelectAllCheckbox}
+        isChecked={isChecked}
+        category={category}
       />
       <List className="message-list">
         {isLoading ? (
@@ -81,8 +97,8 @@ const MessageList = ({ category }) => {
                 className="message-link"
                 onClick={evt => handleCheckboxClick(evt, message.id)}
               >
-                <ListItemText primary={message.subject} />
-                <ListItemSecondaryAction>
+                <ListItemText primary={message.subject} className="message-text" />
+                <ListItemSecondaryAction className="message-checkbox">
                   <Checkbox color="primary" checked={checkedMessages.indexOf(message.id) !== -1} />
                 </ListItemSecondaryAction>
               </Link>
