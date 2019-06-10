@@ -10,6 +10,7 @@
 
 li.message-item {
   padding: 0;
+  height: 48px;
 }
 
 .message-item:hover {
@@ -28,6 +29,15 @@ li.message-item {
 .message-link:link,
 .message-link:visited {
   color: inherit;
+}
+
+.message-text {
+  padding-left: 48px;
+}
+
+.message-checkbox {
+  left: 3px;
+  right: 0;
 }
 
 .empty-messages {
