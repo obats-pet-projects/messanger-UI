@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 240px;
+  padding-top: 16px;
 }
 
 .sidebar::before {
@@ -23,9 +24,10 @@
 .sidebar-link {
   box-sizing: border-box;
   display: flex;
-  width: 100%;
+  align-items: center;
+  width: calc(100% - 10px);
   height: 100%;
-  padding: 8px 16px;
+  padding: 0 16px;
   text-decoration: none;
 }
 
@@ -34,7 +36,16 @@
   color: inherit;
 }
 
+.sidebar-link__active,
+.sidebar-link:hover {
+  border-radius: 0 28px 28px 0;
+  cursor: pointer;
+}
+
+.sidebar-link__active {
+  background-color: #e8eaed;
+}
+
 .sidebar-link:hover {
   background-color: rgba(0, 0, 0, 0.08);
-  cursor: pointer;
 }

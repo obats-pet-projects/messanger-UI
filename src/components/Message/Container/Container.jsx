@@ -12,7 +12,7 @@ const MessageContainer = props => {
 
   return (
     <main className="container">
-      <MessageSidebar />
+      <MessageSidebar category={category} />
       <MessageList category={category} />
     </main>
   );

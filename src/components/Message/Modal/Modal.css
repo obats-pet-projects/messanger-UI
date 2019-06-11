@@ -1,0 +1,55 @@
+button.new-message-button {
+  box-sizing: content-box;
+  position: relative;
+  width: 120px;
+  height: 48px;
+  margin: 0 0 8px 16px;
+  padding: 0 24px 0 0;
+  font-size: 15px;
+  line-height: 32px;
+  color: #3c4043;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-radius: 24px;
+  user-select: none;
+  text-transform: initial;
+}
+
+button.new-message-button::before {
+  content: '';
+  display: block;
+  height: 48px;
+  min-width: 56px;
+  background-image: url(https://www.gstatic.com/images/icons/material/colored_icons/1x/create_32dp.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 32px;
+}
+
+button.new-message-button:hover,
+button.new-message-button:focus,
+button.new-message-button:active {
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149);
+  background-color: #fafafb;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3053b0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  padding-left: 10px;
+  color: #fff;
+}
+
+.modal-header svg {
+  fill: #fff;
+}
+
+div.modal-content {
+  padding: 0;
+}

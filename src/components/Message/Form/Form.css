@@ -1,5 +1,6 @@
 .fieldset {
   border: 0;
+  margin: 0;
   padding: 0;
 }
 
@@ -9,17 +10,23 @@
   font-size: 14px;
 }
 
-.subject-input,
-.message-textarea {
-  min-width: 250px;
-  max-width: 250px;
-  font-size: 16px;
+div.input {
+  display: block;
+  width: 500px;
 }
 
-.title-input {
-  height: 30px;
+.input div.MuiFilledInput-root {
+  background-color: #fff;
 }
 
-.message-textarea {
-  height: 150px;
+.errors-block p {
+  margin: 5px 10px;
+  padding: 0;
+  color: #f00;
+  font-size: 14px;
+}
+
+button.form-button {
+  width: 100px;
+  margin: 10px;
 }
