@@ -1,5 +1,6 @@
 .toolbar-container {
   position: relative;
+  margin-top: 4px;
 }
 
 .toolbar-container::before {
@@ -15,4 +16,10 @@
 .tooltip-action {
   width: 48px;
   height: 48px;
+}
+
+button.delete-forever {
+  font-size: 15px;
+  color: #5f6368;
+  text-transform: initial;
 }

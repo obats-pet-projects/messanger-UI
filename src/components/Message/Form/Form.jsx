@@ -3,7 +3,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { Button, TextField } from '@material-ui/core';
 import axios from '../../../api/axios';
 import { messageSchema, initialValues } from './validation';
-import { successToaster } from '../../UI/Toaster/Toaster';
+import { successToaster, errorToaster } from '../../UI/Toaster/Toaster';
 import './Form.css';
 
 const NewMessageForm = ({ closeModal }) => {
@@ -15,13 +15,11 @@ const NewMessageForm = ({ closeModal }) => {
         closeModal();
         successToaster('Message sent');
       })
-      .catch(error => console.log(error));
+      .catch(() => errorToaster('Something went wrong. Try again later.'));
   };
 
   const NewMessageView = props => {
-    const { values, handleChange, handleBlur, handleSubmit, isValid } = props;
-    console.log(values);
-    console.log('isValid: ', isValid);
+    const { values, handleChange, handleBlur, handleSubmit } = props;
 
     return (
       <Form onSubmit={handleSubmit}>

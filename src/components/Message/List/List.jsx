@@ -10,6 +10,7 @@ import {
 import axios from '../../../api/axios.js';
 import Toolbar from '../Toolbar/Toolbar';
 import Loader from '../../UI/Loader/Loader';
+import { errorToaster } from '../../UI/Toaster/Toaster';
 import './List.css';
 
 const MessageList = ({ category }) => {
@@ -18,7 +19,7 @@ const MessageList = ({ category }) => {
   const [checkedMessages, setCheckedMessages] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleTooltipActionClick = () => {
+  const filterCheckedMessages = () => {
     const filteredMessages = messages.filter(message => !checkedMessages.includes(message.id));
 
     setMessages(filteredMessages);
@@ -56,7 +57,6 @@ const MessageList = ({ category }) => {
       const isAllChecked = newChecked.length === messages.length ? true : false;
 
       setIsChecked(isAllChecked);
-
       setCheckedMessages(newChecked);
     }
   };
@@ -68,7 +68,7 @@ const MessageList = ({ category }) => {
         setMessages(res.data);
         setLoading(false);
       })
-      .catch(error => console.log(error));
+      .catch(() => errorToaster('Something went wrong. Try again later.'));
   };
 
   useEffect(() => {
@@ -80,9 +80,9 @@ const MessageList = ({ category }) => {
   return (
     <div className="messages-container">
       <Toolbar
-        handleTooltipActionClick={handleTooltipActionClick}
-        checkedMessages={checkedMessages}
+        filterCheckedMessages={filterCheckedMessages}
         handleSelectAllCheckbox={handleSelectAllCheckbox}
+        checkedMessages={checkedMessages}
         isChecked={isChecked}
         category={category}
       />
