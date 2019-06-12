@@ -1,23 +1,56 @@
 import React, { Fragment } from 'react';
-import { Tooltip, IconButton, Checkbox } from '@material-ui/core/';
+import { Tooltip, IconButton, Checkbox, Button } from '@material-ui/core/';
 import { toolbarActionLabels } from '../../utils/labels.js';
 import axios from '../../../api/axios';
+import { infoToaster, errorToaster } from '../../UI/Toaster/Toaster';
 import './Toolbar.css';
 
 const Toolbar = ({
-  handleTooltipActionClick,
-  checkedMessages,
+  filterCheckedMessages,
   handleSelectAllCheckbox,
+  checkedMessages,
   isChecked,
   category
 }) => {
-  const handleTooltipClick = evt => {
+  const handleTooltipClick = (evt, title) => {
     axios
       .patch('/messages', {
         messagesIds: checkedMessages,
         category: evt.currentTarget.value
       })
-      .then(() => handleTooltipActionClick());
+      .then(() => {
+        filterCheckedMessages();
+        infoToaster(`Moved to ${title}`);
+      })
+      .catch(() => errorToaster('Something went wrong. Try again later.'));
+  };
+
+  const handleDeleteForeverClick = () => {
+    const messageNumber = checkedMessages.length === 1 ? 1 : checkedMessages.length;
+
+    axios
+      .delete('/messages', {
+        data: { messagesIds: checkedMessages }
+      })
+      .then(() => {
+        if (messageNumber > 1) {
+          infoToaster(`${messageNumber} messages were deleted forever`);
+        } else {
+          infoToaster(`${messageNumber} message was deleted forever`);
+        }
+        filterCheckedMessages();
+      })
+      .catch(() => errorToaster('Something went wrong. Try again later.'));
+  };
+
+  const deleteForeverButton = labelValue => {
+    if (category === 'trash' && labelValue === 'trash') {
+      return (
+        <Button className="delete-forever" onClick={handleDeleteForeverClick}>
+          Delete forever
+        </Button>
+      );
+    }
   };
 
   return (
@@ -34,11 +67,12 @@ const Toolbar = ({
       {checkedMessages.length > 0 &&
         toolbarActionLabels.map((label, index) => (
           <Fragment key={index}>
+            {deleteForeverButton(label.value)}
             {category !== label.value && (
               <Tooltip
                 title={label.title}
                 value={label.value}
-                onClick={handleTooltipClick}
+                onClick={evt => handleTooltipClick(evt, label.title)}
                 className="tooltip-action"
                 disabled={category === label.value}
               >

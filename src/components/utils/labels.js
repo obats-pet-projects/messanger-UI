@@ -13,7 +13,7 @@ export const categoriesLabel = [
 ];
 
 export const toolbarActionLabels = [
-  { title: 'Delete', value: 'trash', icon: DeleteIcon },
+  { title: 'Trash', value: 'trash', icon: DeleteIcon },
   { title: 'Social', value: 'social', icon: PeopleIcon },
   { title: 'Promotions', value: 'promo', icon: CardGiftcardIcon },
   { title: 'Spam', value: 'spam', icon: Unsubscribe }
