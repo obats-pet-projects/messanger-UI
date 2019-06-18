@@ -19,13 +19,6 @@ div.input {
   background-color: #fff;
 }
 
-.errors-block p {
-  margin: 5px 10px;
-  padding: 0;
-  color: #f00;
-  font-size: 14px;
-}
-
 button.form-button {
   width: 100px;
   margin: 10px;
