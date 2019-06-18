@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import { Button, TextField } from '@material-ui/core';
 import axios from '../../../api/axios';
 import { messageSchema, initialValues } from './validation';
@@ -19,13 +19,14 @@ const NewMessageForm = ({ closeModal }) => {
   };
 
   const NewMessageView = props => {
-    const { values, handleChange, handleBlur, handleSubmit } = props;
+    const { values, handleChange, handleBlur, handleSubmit, errors, touched } = props;
 
     return (
       <Form onSubmit={handleSubmit}>
         <fieldset className="fieldset">
           <TextField
             fullWidth
+            error={!!errors.subject && touched.subject}
             label="Subject"
             variant="filled"
             name="subject"
@@ -39,6 +40,7 @@ const NewMessageForm = ({ closeModal }) => {
           <TextField
             fullWidth
             multiline
+            error={!!errors.message && touched.message}
             rows="10"
             label="Message"
             variant="filled"
@@ -50,15 +52,6 @@ const NewMessageForm = ({ closeModal }) => {
             className="input"
           />
         </fieldset>
-
-        <div className="errors-block">
-          <p>
-            <ErrorMessage name="subject" />
-          </p>
-          <p>
-            <ErrorMessage name="message" />
-          </p>
-        </div>
 
         <Button variant="contained" color="primary" type="submit" className="form-button">
           Send
