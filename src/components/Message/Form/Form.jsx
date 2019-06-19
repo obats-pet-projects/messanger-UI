@@ -10,10 +10,14 @@ const NewMessageForm = ({ closeModal }) => {
   const onSubmitClick = (values, actions) => {
     axios
       .post('/messages', values)
-      .then(() => {
-        actions.resetForm({});
-        closeModal();
-        successToaster('Message sent');
+      .then(({ data }) => {
+        if (!!data.success) {
+          return errorToaster(data.message);
+        } else {
+          actions.resetForm({});
+          closeModal();
+          successToaster('Message sent');
+        }
       })
       .catch(() => errorToaster('Something went wrong. Try again later.'));
   };
