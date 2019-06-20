@@ -7,7 +7,7 @@ import {
   ListItemText,
   Checkbox
 } from '@material-ui/core/';
-import axios from '../../../api/axios.js';
+import { httpService } from '../../../api/axios';
 import Toolbar from '../Toolbar/Toolbar';
 import Loader from '../../UI/Loader/Loader';
 import { errorToaster } from '../../UI/Toaster/Toaster';
@@ -62,7 +62,7 @@ const MessageList = ({ category }) => {
   };
 
   const fetchMessages = (category = 'inbox') => {
-    axios
+    httpService()
       .get(`/messages/mail/category/?category=${category}`)
       .then(res => {
         setMessages(res.data);

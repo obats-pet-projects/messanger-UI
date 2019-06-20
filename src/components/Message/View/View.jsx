@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import MessageSidebar from '../Sidebar/Sidebar';
-import axios from '../../../api/axios';
+import { httpService } from '../../../api/axios';
 import '../Container/Container.css';
 import '../View/View.css';
 
@@ -10,7 +10,7 @@ const MessageView = props => {
   const [message, setMessage] = useState([]);
 
   useEffect(() => {
-    axios
+    httpService()
       .get(`/messages/${id}`)
       .then(res => {
         setMessage(res.data);

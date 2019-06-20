@@ -15,10 +15,10 @@ export const signUpSchema = Yup.object().shape({
     .required('Password is required')
     .min(minPasswordLength, `Password should be at least ${minPasswordLength} characters`)
     .max(maxPasswordLength, `Password should be max ${maxUsernameLength} characters`)
-    .matches(
-      /^.*(?=.{6,15})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      'Password must contain only Latin alphabetical letters, integers, and characters.'
-    )
+  // .matches(
+  //   /^.*(?=.{6,15})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+  //   'Password must contain only Latin alphabetical letters, integers, and characters.'
+  // )
 });
 
 export const initialValues = {

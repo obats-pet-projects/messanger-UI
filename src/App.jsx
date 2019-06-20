@@ -2,25 +2,30 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { saveUserData } from './actions/user';
-import axios from './api/axios';
+import { httpService } from './api/axios';
 import Routes from './Routes';
 import Header from './components/Header/Header';
 import Loader from './components/UI/Loader/Loader';
 import { Toaster } from './components/UI/Toaster/Toaster';
 
-const App = () => {
+const App = ({ saveUserData }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
+    httpService()
       .get('/auth/validate')
       .then(({ data }) => {
+        if (!data.success && data.message) {
+          setIsLoading(false);
+          return null;
+        }
+
         const { id, username, email } = data;
         saveUserData({ id, username, email });
         setIsLoading(false);
       })
       .catch(error => console.log(error));
-  }, []);
+  }, [saveUserData]);
 
   return (
     <Fragment>
