@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-const accessToken = localStorage.getItem('access-token');
+let token;
 
-export default axios.create({
-  baseURL: 'http://localhost:3030/api',
-  headers: { 'access-token': accessToken }
-});
+export const httpService = () => {
+  token = token || localStorage.getItem('access-token');
+  return axios.create({
+    baseURL: 'http://localhost:3030/api',
+    headers: { 'access-token': token }
+  });
+};

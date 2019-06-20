@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Tooltip, IconButton, Checkbox, Button } from '@material-ui/core/';
-import { toolbarActionLabels } from '../../utils/labels.js';
-import axios from '../../../api/axios';
+import { httpService } from '../../../api/axios';
+import { toolbarActionLabels } from '../../utils/labels';
 import { infoToaster, errorToaster } from '../../UI/Toaster/Toaster';
 import './Toolbar.css';
 
@@ -13,11 +13,8 @@ const Toolbar = ({
   category
 }) => {
   const handleTooltipClick = (evt, title) => {
-    axios
-      .patch('/messages', {
-        messagesIds: checkedMessages,
-        category: evt.currentTarget.value
-      })
+    httpService()
+      .patch('/messages', { messagesIds: checkedMessages, category: evt.currentTarget.value })
       .then(() => {
         filterCheckedMessages();
         infoToaster(`Moved to ${title}`);
@@ -28,7 +25,7 @@ const Toolbar = ({
   const handleDeleteForeverClick = () => {
     const messageNumber = checkedMessages.length === 1 ? 1 : checkedMessages.length;
 
-    axios
+    httpService()
       .delete('/messages', {
         data: { messagesIds: checkedMessages }
       })

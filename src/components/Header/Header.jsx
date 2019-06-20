@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { AppBar, Toolbar, IconButton, MenuItem, Menu } from '@material-ui/core/';
 import './Header.css';
+import { handleSignOut } from '../../actions/user';
 
-const Header = () => {
+const Header = ({ handleSignOut }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -12,6 +14,12 @@ const Header = () => {
   };
 
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onSignoutClick = () => {
+    handleSignOut();
+    localStorage.removeItem('access-token');
     setAnchorEl(null);
   };
 
@@ -44,6 +52,7 @@ const Header = () => {
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={onSignoutClick}>Sign out</MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -52,4 +61,13 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapDispatchToProps = dispatch => ({
+  handleSignOut: () => {
+    dispatch(handleSignOut());
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Header);

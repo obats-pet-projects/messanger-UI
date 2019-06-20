@@ -1,14 +1,14 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
 import { Button, TextField } from '@material-ui/core';
-import axios from '../../../api/axios';
+import { httpService } from '../../../api/axios';
 import { messageSchema, initialValues } from './validation';
 import { successToaster, errorToaster } from '../../UI/Toaster/Toaster';
 import './Form.css';
 
 const NewMessageForm = ({ closeModal }) => {
   const onSubmitClick = (values, actions) => {
-    axios
+    httpService()
       .post('/messages', values)
       .then(({ data }) => {
         if (!!data.success) {

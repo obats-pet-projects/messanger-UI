@@ -1,29 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, TextField } from '@material-ui/core';
-import axios from '../../../api/axios';
+import { httpService } from '../../../api/axios';
 import { saveUserData } from '../../../actions/user';
 import { signInSchema, initialValues } from './validation';
 import { errorToaster } from '../../UI/Toaster/Toaster';
 import './SignIn.css';
 
-const accessToken = localStorage.getItem('access-token');
-
-const SignIn = ({ history, loggedUser, saveUserData }) => {
+const SignIn = ({ loggedUser, saveUserData }) => {
   const onSubmitClick = values => {
-    axios
+    httpService()
       .post('/auth/signin', values)
       .then(({ data, headers }) => {
-        console.log(accessToken);
-        localStorage.setItem('access-token', headers['access-token']);
         const { id, username, email } = data.user;
+
+        localStorage.setItem('access-token', headers['access-token']);
+
         saveUserData({ id, username, email });
-        history.push('/');
       })
-      .catch(() => {
-        errorToaster('Something went wrong. Try again later.');
+      .catch(error => {
+        errorToaster(error.response.data.message);
       });
   };
 
@@ -79,6 +77,7 @@ const SignIn = ({ history, loggedUser, saveUserData }) => {
         </div>
       );
     }
+    return <Redirect to="/" />;
   };
   return (
     <Formik
