@@ -6,17 +6,13 @@ const ProtectedRoute = ({ component: Component, ...protectedRouteProps }) => (
   <Route
     {...protectedRouteProps}
     render={props =>
-      protectedRouteProps.loggedUser ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: '/auth/signin/' }} />
-      )
+      protectedRouteProps.isLogged ? <Component {...props} /> : <Redirect to="/auth/signin" />
     }
   />
 );
 
 const mapStateToProps = ({ user }) => ({
-  loggedUser: user.loggedUser
+  isLogged: user.isLogged
 });
 
 export default connect(

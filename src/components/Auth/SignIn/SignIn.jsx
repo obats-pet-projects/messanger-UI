@@ -6,11 +6,11 @@ import { Button, TextField, Collapse } from '@material-ui/core';
 import Error from '@material-ui/icons/Error';
 import { httpService } from '../../../api/axios';
 import { saveUserData } from '../../../actions/user';
-import { signInSchema, initialValues } from './validation';
 import { errorToaster } from '../../UI/Toaster/Toaster';
+import { signInSchema, initialValues } from './validation';
 import './SignIn.css';
 
-const SignIn = ({ loggedUser, saveUserData }) => {
+const SignIn = ({ isLogged, saveUserData }) => {
   const onSubmitClick = (values, { setFieldError }) => {
     httpService()
       .post('/auth/signin', values)
@@ -18,7 +18,6 @@ const SignIn = ({ loggedUser, saveUserData }) => {
         const { id, username, email } = data.user;
 
         localStorage.setItem('access-token', headers['access-token']);
-
         saveUserData({ id, username, email });
       })
       .catch(({ response }) => {
@@ -36,7 +35,7 @@ const SignIn = ({ loggedUser, saveUserData }) => {
   const SignInView = props => {
     const { values, handleChange, handleBlur, handleSubmit, errors, touched } = props;
 
-    if (!loggedUser) {
+    if (!isLogged) {
       return (
         <div className="signin-container">
           <Form className="signin-form" onSubmit={handleSubmit}>
@@ -115,7 +114,7 @@ const SignIn = ({ loggedUser, saveUserData }) => {
 };
 
 const mapStateToProps = ({ user }) => ({
-  loggedUser: user.loggedUser
+  isLogged: user.isLogged
 });
 
 const mapDispatchToProps = dispatch => ({

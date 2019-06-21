@@ -44,7 +44,7 @@ const App = ({ saveUserData }) => {
 
 const mapStateToProps = ({ user }) => ({
   userData: user.userData,
-  loggedUser: user.loggedUser
+  isLogged: user.isLogged
 });
 
 const mapDispatchToProps = dispatch => ({
