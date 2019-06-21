@@ -28,12 +28,30 @@
   font-weight: 400;
 }
 
-div.signup-form__input {
+.signup-form__input-wraper {
+  width: 100%;
   margin-bottom: 15px;
 }
 
-div.signup-form__input:nth-of-type(3) {
+.signup-form__input-wraper:nth-of-type(3) {
   margin-bottom: 0;
+}
+
+.signup-form__error-message {
+  display: flex;
+  align-items: flex-end;
+  margin: 5px 0 0 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d93025;
+}
+
+.signup-form__error-message svg {
+  align-self: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 7px;
+  fill: #d93025;
 }
 
 button.signup-form__submit,
