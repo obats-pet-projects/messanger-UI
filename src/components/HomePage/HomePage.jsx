@@ -1,12 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import MessageContainer from '../Message/Container/Container';
 
 const HomePage = () => {
-  return (
-    <Fragment>
-      <MessageContainer />
-    </Fragment>
-  );
+  return <MessageContainer />;
 };
 
 export default HomePage;

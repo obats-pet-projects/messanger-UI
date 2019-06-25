@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Checkbox
-} from '@material-ui/core/';
+import { List, ListItem, ListItemText, Checkbox } from '@material-ui/core/';
 import { httpService } from '../../../api/axios';
 import Toolbar from '../Toolbar/Toolbar';
 import Loader from '../../UI/Loader/Loader';
@@ -41,24 +35,20 @@ const MessageList = ({ category }) => {
     }
   };
 
-  const handleCheckboxClick = (evt, id) => {
-    if (evt.target.nodeName === 'INPUT') {
-      evt.preventDefault();
+  const handleCheckboxClick = id => {
+    const currentIndex = checkedMessages.indexOf(id);
+    let newChecked = [...checkedMessages];
 
-      const currentIndex = checkedMessages.indexOf(id);
-      let newChecked = [...checkedMessages];
-
-      if (currentIndex === -1) {
-        newChecked = [...newChecked, id];
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-
-      const isAllChecked = newChecked.length === messages.length ? true : false;
-
-      setIsChecked(isAllChecked);
-      setCheckedMessages(newChecked);
+    if (currentIndex === -1) {
+      newChecked = [...newChecked, id];
+    } else {
+      newChecked.splice(currentIndex, 1);
     }
+
+    const isAllChecked = newChecked.length === messages.length;
+
+    setIsChecked(isAllChecked);
+    setCheckedMessages(newChecked);
   };
 
   const fetchMessages = (category = 'inbox') => {
@@ -92,21 +82,20 @@ const MessageList = ({ category }) => {
         ) : messages.length > 0 ? (
           messages.map(message => (
             <ListItem key={message.id} className="message-item">
-              <Link
-                to={`/${message.id}`}
-                className="message-link"
-                onClick={evt => handleCheckboxClick(evt, message.id)}
-              >
+              <Checkbox
+                className="message-checkbox"
+                color="primary"
+                checked={checkedMessages.indexOf(message.id) !== -1}
+                onClick={() => handleCheckboxClick(message.id)}
+              />
+              <Link to={`/${message.id}`} className="message-link">
                 <ListItemText primary={message.subject} className="message-text" />
-                <ListItemSecondaryAction className="message-checkbox">
-                  <Checkbox color="primary" checked={checkedMessages.indexOf(message.id) !== -1} />
-                </ListItemSecondaryAction>
               </Link>
             </ListItem>
           ))
         ) : (
           <div>
-            <h4 className="empty-messages">No messages in this category</h4>
+            <h4 className="no-messages">No messages in this category</h4>
           </div>
         )}
       </List>

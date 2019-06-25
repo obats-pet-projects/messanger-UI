@@ -21,13 +21,17 @@ const SignIn = ({ isLogged, saveUserData }) => {
         saveUserData({ id, username, email });
       })
       .catch(({ response }) => {
-        const { message } = response.data;
+        if (response) {
+          const { message } = response.data;
 
-        if (response.status === 400) {
-          setFieldError('email', message);
-          setFieldError('password', message);
+          if (response.status === 400) {
+            setFieldError('email', message);
+            setFieldError('password', message);
+          } else {
+            errorToaster(message);
+          }
         } else {
-          errorToaster(message);
+          errorToaster('Server is down. Please try again later');
         }
       });
   };

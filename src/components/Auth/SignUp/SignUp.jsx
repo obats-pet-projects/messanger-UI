@@ -1,48 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, TextField, Collapse } from '@material-ui/core';
 import Error from '@material-ui/icons/Error';
-import { httpService } from '../../../api/axios';
-import { saveUserData } from '../../../actions/user';
-import { errorToaster } from '../../UI/Toaster/Toaster';
+import { signUpService } from '../../../actions/auth';
 import { signUpSchema, initialValues } from './validation';
 import successIcon from './success.svg';
 import './SignUp.css';
 
-const SignUp = ({ history, isLogged, saveUserData }) => {
-  const [isRotate, setIsRotate] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
-
+const SignUp = ({ history, isLogged, signUpService, authError }) => {
   const onSubmitClick = (values, { setFieldError }) => {
-    httpService()
-      .post('/auth/signup', values)
-      .then(({ data, headers }) => {
-        const { id, username, email } = data.user;
-
-        setIsRotate(true);
-        localStorage.setItem('access-token', headers['access-token']);
-        setUserDetails({ id, username, email });
-      })
-      .catch(({ response }) => {
-        const { field, message } = response.data;
-
-        if (response.status === 422 && field === 'username') {
-          return setFieldError('username', message);
-        }
-
-        if (response.status === 422 && field === 'email') {
-          return setFieldError('email', message);
-        }
-
-        return errorToaster(message);
-      });
+    signUpService(values);
   };
 
   const onConfirmButtonClick = () => {
     history.push('/');
-    saveUserData(userDetails);
   };
 
   const SignUpView = props => {
@@ -52,7 +25,7 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
       <div>
         {!isLogged ? (
           <div className="signup-container">
-            <div className={`signup-wrapper ${isRotate ? 'signup-wrapper--rotate' : ''}`}>
+            <div className={`signup-wrapper`}>
               <Form className="signup-form" onSubmit={handleSubmit}>
                 <h2 className="signup-form__title">Create your Messanger Account</h2>
                 <div className="signup-form__input-wraper">
@@ -166,13 +139,14 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  isLogged: user.isLogged
+const mapStateToProps = ({ user, authError }) => ({
+  isLogged: user.isLogged,
+  authError
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveUserData: data => {
-    dispatch(saveUserData(data));
+  signUpService: data => {
+    dispatch(signUpService(data));
   }
 });
 

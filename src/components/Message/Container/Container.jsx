@@ -7,7 +7,8 @@ const MessageContainer = props => {
   let category;
 
   if (props.location) {
-    category = props.location.search.substring(props.location.search.indexOf('=') + 1);
+    const urlParams = new URLSearchParams(props.location.search);
+    category = urlParams.get('category');
   }
 
   return (
