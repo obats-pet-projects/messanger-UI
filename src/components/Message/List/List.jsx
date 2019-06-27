@@ -62,8 +62,6 @@ const MessageList = ({ category, fetchMessagesByCategory, messagesList, isLoadin
     if (appErrors.type === 'server') {
       errorToaster(appErrors.message);
     }
-
-    return () => fetchMessages(category);
   }, [appErrors.message, appErrors.type, category, fetchMessagesByCategory]);
 
   return (
