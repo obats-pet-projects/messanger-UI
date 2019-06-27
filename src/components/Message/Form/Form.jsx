@@ -1,26 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { Button, TextField } from '@material-ui/core';
-import { httpService } from '../../../api/axios';
+import { newMessageService, setMessageSendStatus } from '../../../actions/messages';
 import { messageSchema, initialValues } from './validation';
 import { successToaster, errorToaster } from '../../UI/Toaster/Toaster';
 import './Form.css';
 
-const NewMessageForm = ({ closeModal }) => {
-  const onSubmitClick = (values, actions) => {
-    httpService()
-      .post('/messages', values)
-      .then(({ data }) => {
-        if (!!data.success) {
-          return errorToaster(data.message);
-        } else {
-          actions.resetForm({});
-          closeModal();
-          successToaster('Message sent');
-        }
-      })
-      .catch(() => errorToaster('Something went wrong. Try again later.'));
+const NewMessageForm = ({
+  newMessageService,
+  closeModal,
+  appErrors,
+  messageIsSent,
+  setMessageSendStatus
+}) => {
+  const onSubmitClick = values => {
+    newMessageService(values);
   };
+
+  useEffect(() => {
+    if (messageIsSent) {
+      closeModal();
+      successToaster('Message sent');
+      setMessageSendStatus(false);
+    }
+
+    if (appErrors.type === 'server') {
+      errorToaster(appErrors.message);
+    }
+  }, [appErrors.message, appErrors.type, closeModal, messageIsSent, setMessageSendStatus]);
 
   const NewMessageView = props => {
     const { values, handleChange, handleBlur, handleSubmit, errors, touched } = props;
@@ -72,5 +80,21 @@ const NewMessageForm = ({ closeModal }) => {
     />
   );
 };
+const mapStateToProps = ({ appErrors, messageSendStatus }) => ({
+  appErrors,
+  messageIsSent: messageSendStatus.isSent
+});
 
-export default NewMessageForm;
+const mapDispatchToProps = dispatch => ({
+  newMessageService: (values, resetForm) => {
+    dispatch(newMessageService(values, resetForm));
+  },
+  setMessageSendStatus: status => {
+    dispatch(setMessageSendStatus(status));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewMessageForm);

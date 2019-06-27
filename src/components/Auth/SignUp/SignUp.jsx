@@ -1,64 +1,56 @@
-import React, { useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, TextField, Collapse } from '@material-ui/core';
 import Error from '@material-ui/icons/Error';
-import { httpService } from '../../../api/axios';
-import { saveUserData } from '../../../actions/user';
-import { errorToaster } from '../../UI/Toaster/Toaster';
+import { authService } from '../../../actions/auth';
+import { setAppErrors } from '../../../actions/appErrors';
 import { signUpSchema, initialValues } from './validation';
-import successIcon from './success.svg';
+import { errorToaster } from '../../UI/Toaster/Toaster';
 import './SignUp.css';
 
-const SignUp = ({ history, isLogged, saveUserData }) => {
-  const [isRotate, setIsRotate] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
+const SignUp = ({ isLogged, authService, setAppErrors, appErrors }) => {
+  const onSubmitClick = values => {
+    const url = '/auth/signup';
 
-  const onSubmitClick = (values, { setFieldError }) => {
-    httpService()
-      .post('/auth/signup', values)
-      .then(({ data, headers }) => {
-        const { id, username, email } = data.user;
-
-        setIsRotate(true);
-        localStorage.setItem('access-token', headers['access-token']);
-        setUserDetails({ id, username, email });
-      })
-      .catch(({ response }) => {
-        const { field, message } = response.data;
-
-        if (response.status === 422 && field === 'username') {
-          return setFieldError('username', message);
-        }
-
-        if (response.status === 422 && field === 'email') {
-          return setFieldError('email', message);
-        }
-
-        return errorToaster(message);
-      });
+    authService(url, values);
   };
 
-  const onConfirmButtonClick = () => {
-    history.push('/');
-    saveUserData(userDetails);
-  };
+  useEffect(() => {
+    if (appErrors.type === 'credential') {
+      setAppErrors({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (appErrors.type === 'server') {
+      errorToaster(appErrors.message);
+    }
+  }, [appErrors.message, appErrors.type]);
 
   const SignUpView = props => {
     const { values, handleChange, handleBlur, handleSubmit, errors, touched } = props;
 
+    const isUsernameError = Boolean(
+      (!!errors.username && touched.username) || appErrors.type === 'credential'
+    );
+    const isEmailError = Boolean(
+      (!!errors.email && touched.email) || appErrors.type === 'credential'
+    );
+
     return (
-      <div>
+      <Fragment>
         {!isLogged ? (
           <div className="signup-container">
-            <div className={`signup-wrapper ${isRotate ? 'signup-wrapper--rotate' : ''}`}>
+            <div className="signup-wrapper">
               <Form className="signup-form" onSubmit={handleSubmit}>
                 <h2 className="signup-form__title">Create your Messanger Account</h2>
                 <div className="signup-form__input-wraper">
                   <TextField
                     fullWidth
-                    error={!!errors.username && touched.username}
+                    error={isUsernameError}
                     variant="outlined"
                     id="username-field"
                     label="Username"
@@ -68,10 +60,14 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
                     value={values.username || ''}
                     className="signup-form__input"
                   />
-                  <Collapse in={!!errors.username && touched.username}>
+                  <Collapse in={isUsernameError}>
                     <div className="signup-form__error-message">
                       <Error />
-                      <ErrorMessage name="username" />
+                      {touched.username && appErrors.type === 'credential' ? (
+                        appErrors.message
+                      ) : (
+                        <ErrorMessage name="username" />
+                      )}
                     </div>
                   </Collapse>
                 </div>
@@ -79,7 +75,7 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
                 <div className="signup-form__input-wraper">
                   <TextField
                     fullWidth
-                    error={!!errors.email && touched.email}
+                    error={isEmailError}
                     variant="outlined"
                     type="email"
                     id="email-field"
@@ -90,10 +86,14 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
                     value={values.email || ''}
                     className="signup-form__input"
                   />
-                  <Collapse in={!!errors.email && touched.email}>
+                  <Collapse in={isEmailError}>
                     <div className="signup-form__error-message">
                       <Error />
-                      <ErrorMessage name="email" />
+                      {appErrors.type === 'credential' ? (
+                        appErrors.message
+                      ) : (
+                        <ErrorMessage name="email" />
+                      )}
                     </div>
                   </Collapse>
                 </div>
@@ -132,28 +132,12 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
                   <Link to={'/auth/signin'}>Sign in instead</Link>
                 </div>
               </Form>
-
-              <div className="signup-success">
-                <header className="signup-success__header">
-                  <img src={successIcon} alt="success" width="120" height="120" />
-                  <h2>Registration completed successfully</h2>
-                </header>
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="primary"
-                  className="signup-success__button"
-                  onClick={onConfirmButtonClick}
-                >
-                  OK
-                </Button>
-              </div>
             </div>
           </div>
         ) : (
           <Redirect to="/" />
         )}
-      </div>
+      </Fragment>
     );
   };
   return (
@@ -166,13 +150,17 @@ const SignUp = ({ history, isLogged, saveUserData }) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  isLogged: user.isLogged
+const mapStateToProps = ({ user, appErrors }) => ({
+  isLogged: user.isLogged,
+  appErrors
 });
 
 const mapDispatchToProps = dispatch => ({
-  saveUserData: data => {
-    dispatch(saveUserData(data));
+  authService: (url, values) => {
+    dispatch(authService(url, values));
+  },
+  setAppErrors: status => {
+    dispatch(setAppErrors(status));
   }
 });
 

@@ -36,13 +36,13 @@
   color: inherit;
 }
 
-.sidebar-link__active,
+.sidebar-link--active,
 .sidebar-link:hover {
   border-radius: 0 28px 28px 0;
   cursor: pointer;
 }
 
-.sidebar-link__active {
+.sidebar-link--active {
   background-color: #e8eaed;
 }
 

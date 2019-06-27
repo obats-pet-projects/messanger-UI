@@ -3,25 +3,11 @@
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 64px);
-  -webkit-perspective: 500px;
-  perspective: 500px;
 }
 
 .signup-wrapper {
-  position: relative;
   border: 1px solid #dadce0;
   border-radius: 5px;
-}
-
-.signup-wrapper--rotate {
-  transform: rotateY(180deg);
-  transition: transform 1s;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-
-.signup-wrapper--rotate .signup-form {
-  visibility: hidden;
 }
 
 .signup-form__title {
@@ -54,20 +40,12 @@
   fill: #d93025;
 }
 
-button.signup-form__submit,
-button.signup-success__button {
+button.signup-form__submit {
+  width: 100%;
   height: 50px;
   margin: 15px 0 0;
   padding: 10px 0;
   font-size: 16px;
-}
-
-button.signup-form__submit {
-  width: 100%;
-}
-
-button.signup-success__button {
-  width: 25%;
 }
 
 .signup-form__link {
@@ -82,32 +60,11 @@ button.signup-success__button {
   text-decoration: none;
 }
 
-.signup-form,
-.signup-success {
+.signup-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 450px;
   height: 100%;
   padding: 40px;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.signup-success {
-  position: absolute;
-  top: 0;
-  left: 0;
-  justify-content: center;
-  transform: rotateY(180deg);
-}
-
-.signup-success__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.signup-success__header h2 {
-  text-align: center;
 }

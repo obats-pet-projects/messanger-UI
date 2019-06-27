@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Checkbox
-} from '@material-ui/core/';
-import { httpService } from '../../../api/axios';
+import { List, ListItem, ListItemText, Checkbox } from '@material-ui/core/';
+import { fetchMessagesByCategory } from '../../../actions/messages';
 import Toolbar from '../Toolbar/Toolbar';
 import Loader from '../../UI/Loader/Loader';
 import { errorToaster } from '../../UI/Toaster/Toaster';
 import './List.css';
 
-const MessageList = ({ category }) => {
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+const MessageList = ({ category, fetchMessagesByCategory, messagesList, isLoading, appErrors }) => {
   const [checkedMessages, setCheckedMessages] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
   const filterCheckedMessages = () => {
-    const filteredMessages = messages.filter(message => !checkedMessages.includes(message.id));
+    const filteredMessages = messagesList.filter(message => !checkedMessages.includes(message.id));
 
-    setMessages(filteredMessages);
+    fetchMessagesByCategory(filteredMessages);
     setIsChecked(false);
     setCheckedMessages('');
   };
@@ -30,52 +23,48 @@ const MessageList = ({ category }) => {
   const handleSelectAllCheckbox = evt => {
     const checked = evt.currentTarget.checked ? true : false;
 
-    if (messages.length > 0) {
+    if (messagesList.length > 0) {
       setIsChecked(checked);
     }
 
     if (checked) {
-      messages.map(message => setCheckedMessages(prevState => [...prevState, message.id]));
+      messagesList.map(message => setCheckedMessages(prevState => [...prevState, message.id]));
     } else {
       setCheckedMessages('');
     }
   };
 
-  const handleCheckboxClick = (evt, id) => {
-    if (evt.target.nodeName === 'INPUT') {
-      evt.preventDefault();
+  const handleCheckboxClick = id => {
+    const currentIndex = checkedMessages.indexOf(id);
+    let newChecked = [...checkedMessages];
 
-      const currentIndex = checkedMessages.indexOf(id);
-      let newChecked = [...checkedMessages];
-
-      if (currentIndex === -1) {
-        newChecked = [...newChecked, id];
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-
-      const isAllChecked = newChecked.length === messages.length ? true : false;
-
-      setIsChecked(isAllChecked);
-      setCheckedMessages(newChecked);
+    if (currentIndex === -1) {
+      newChecked = [...newChecked, id];
+    } else {
+      newChecked.splice(currentIndex, 1);
     }
-  };
 
-  const fetchMessages = (category = 'inbox') => {
-    httpService()
-      .get(`/messages/mail/category/?category=${category}`)
-      .then(res => {
-        setMessages(res.data);
-        setLoading(false);
-      })
-      .catch(() => errorToaster('Something went wrong. Try again later.'));
+    const isAllChecked = newChecked.length === messagesList.length;
+
+    setIsChecked(isAllChecked);
+    setCheckedMessages(newChecked);
   };
 
   useEffect(() => {
+    const fetchMessages = (category = 'inbox') => {
+      fetchMessagesByCategory(category);
+    };
+
     setIsChecked(false);
     setCheckedMessages('');
     fetchMessages(category);
-  }, [category]);
+
+    if (appErrors.type === 'server') {
+      errorToaster(appErrors.message);
+    }
+
+    return () => fetchMessages(category);
+  }, [appErrors.message, appErrors.type, category, fetchMessagesByCategory]);
 
   return (
     <div className="messages-container">
@@ -89,24 +78,23 @@ const MessageList = ({ category }) => {
       <List className="message-list">
         {isLoading ? (
           <Loader />
-        ) : messages.length > 0 ? (
-          messages.map(message => (
+        ) : messagesList.length > 0 ? (
+          messagesList.map(message => (
             <ListItem key={message.id} className="message-item">
-              <Link
-                to={`/${message.id}`}
-                className="message-link"
-                onClick={evt => handleCheckboxClick(evt, message.id)}
-              >
+              <Checkbox
+                className="message-checkbox"
+                color="primary"
+                checked={checkedMessages.indexOf(message.id) !== -1}
+                onClick={() => handleCheckboxClick(message.id)}
+              />
+              <Link to={`/${message.id}`} className="message-link">
                 <ListItemText primary={message.subject} className="message-text" />
-                <ListItemSecondaryAction className="message-checkbox">
-                  <Checkbox color="primary" checked={checkedMessages.indexOf(message.id) !== -1} />
-                </ListItemSecondaryAction>
               </Link>
             </ListItem>
           ))
         ) : (
           <div>
-            <h4 className="empty-messages">No messages in this category</h4>
+            <h4 className="no-messages">No messages in this category</h4>
           </div>
         )}
       </List>
@@ -114,4 +102,19 @@ const MessageList = ({ category }) => {
   );
 };
 
-export default MessageList;
+const mapStateToProps = ({ loader, messages, appErrors }) => ({
+  isLoading: loader.isLoading,
+  messagesList: messages.messagesList,
+  appErrors
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchMessagesByCategory: data => {
+    dispatch(fetchMessagesByCategory(data));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MessageList);

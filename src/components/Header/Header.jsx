@@ -19,7 +19,6 @@ const Header = ({ handleSignOut }) => {
 
   const onSignoutClick = () => {
     handleSignOut();
-    localStorage.removeItem('access-token');
     setAnchorEl(null);
   };
 
