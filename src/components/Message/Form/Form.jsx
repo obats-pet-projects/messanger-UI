@@ -11,7 +11,7 @@ const NewMessageForm = ({
   newMessageService,
   closeModal,
   appErrors,
-  messageIsSent,
+  isSent,
   setMessageSendStatus
 }) => {
   const onSubmitClick = values => {
@@ -19,7 +19,7 @@ const NewMessageForm = ({
   };
 
   useEffect(() => {
-    if (messageIsSent) {
+    if (isSent) {
       closeModal();
       successToaster('Message sent');
       setMessageSendStatus(false);
@@ -28,7 +28,7 @@ const NewMessageForm = ({
     if (appErrors.type === 'server') {
       errorToaster(appErrors.message);
     }
-  }, [appErrors.message, appErrors.type, closeModal, messageIsSent, setMessageSendStatus]);
+  }, [appErrors.message, appErrors.type, closeModal, isSent, setMessageSendStatus]);
 
   const NewMessageView = props => {
     const { values, handleChange, handleBlur, handleSubmit, errors, touched } = props;
@@ -80,9 +80,9 @@ const NewMessageForm = ({
     />
   );
 };
-const mapStateToProps = ({ appErrors, messageSendStatus }) => ({
+const mapStateToProps = ({ appErrors, messages }) => ({
   appErrors,
-  messageIsSent: messageSendStatus.isSent
+  isSent: messages.isSent
 });
 
 const mapDispatchToProps = dispatch => ({

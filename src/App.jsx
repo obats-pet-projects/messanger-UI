@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { fetchUserData } from './actions/user';
 import Loader from './components/UI/Loader/Loader';
 import Routes from './Routes';
-import Header from './components/Header/Header';
+import HeaderContainer from './components/Header/Container/Container';
 import { Toaster } from './components/UI/Toaster/Toaster';
 
 const App = ({ isLoading, fetchUserData }) => {
@@ -19,7 +19,7 @@ const App = ({ isLoading, fetchUserData }) => {
         <Loader />
       ) : (
         <BrowserRouter>
-          <Header />
+          <HeaderContainer />
           <Routes />
         </BrowserRouter>
       )}
