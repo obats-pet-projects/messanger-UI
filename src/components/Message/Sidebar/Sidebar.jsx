@@ -15,7 +15,7 @@ const MessageSidebar = ({ category }) => {
             <li key={index} className="sidebar-item">
               <Link
                 to={`/mail/category/?category=${label.value}`}
-                className={`sidebar-link ${category === label.value ? 'sidebar-link__active' : ''}`}
+                className={`sidebar-link ${category === label.value ? 'sidebar-link--active' : ''}`}
               >
                 <ListItemIcon>
                   <label.icon />

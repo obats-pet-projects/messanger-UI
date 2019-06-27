@@ -4,7 +4,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SAVE_USER_DATA': {
       return {
-        userData: action.payload,
+        userData: action.userData,
         isLogged: true
       };
     }

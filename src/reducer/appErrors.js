@@ -1,8 +1,8 @@
 const initialState = { type: '', message: '' };
 
-const authError = (state = initialState, action) => {
+const appErrors = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_AUTH_ERROR': {
+    case 'SET_APP_ERRORS': {
       return {
         type: action.payload.type,
         message: action.payload.message
@@ -13,4 +13,4 @@ const authError = (state = initialState, action) => {
   }
 };
 
-export default authError;
+export default appErrors;

@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { List, ListItem, ListItemText, Checkbox } from '@material-ui/core/';
-import { httpService } from '../../../api/axios';
+import { fetchMessagesByCategory } from '../../../actions/messages';
 import Toolbar from '../Toolbar/Toolbar';
 import Loader from '../../UI/Loader/Loader';
 import { errorToaster } from '../../UI/Toaster/Toaster';
 import './List.css';
 
-const MessageList = ({ category }) => {
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+const MessageList = ({ category, fetchMessagesByCategory, messagesList, isLoading, appErrors }) => {
   const [checkedMessages, setCheckedMessages] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
   const filterCheckedMessages = () => {
-    const filteredMessages = messages.filter(message => !checkedMessages.includes(message.id));
+    const filteredMessages = messagesList.filter(message => !checkedMessages.includes(message.id));
 
-    setMessages(filteredMessages);
+    fetchMessagesByCategory(filteredMessages);
     setIsChecked(false);
     setCheckedMessages('');
   };
@@ -24,12 +23,12 @@ const MessageList = ({ category }) => {
   const handleSelectAllCheckbox = evt => {
     const checked = evt.currentTarget.checked ? true : false;
 
-    if (messages.length > 0) {
+    if (messagesList.length > 0) {
       setIsChecked(checked);
     }
 
     if (checked) {
-      messages.map(message => setCheckedMessages(prevState => [...prevState, message.id]));
+      messagesList.map(message => setCheckedMessages(prevState => [...prevState, message.id]));
     } else {
       setCheckedMessages('');
     }
@@ -45,27 +44,27 @@ const MessageList = ({ category }) => {
       newChecked.splice(currentIndex, 1);
     }
 
-    const isAllChecked = newChecked.length === messages.length;
+    const isAllChecked = newChecked.length === messagesList.length;
 
     setIsChecked(isAllChecked);
     setCheckedMessages(newChecked);
   };
 
-  const fetchMessages = (category = 'inbox') => {
-    httpService()
-      .get(`/messages/mail/category/?category=${category}`)
-      .then(res => {
-        setMessages(res.data);
-        setLoading(false);
-      })
-      .catch(() => errorToaster('Something went wrong. Try again later.'));
-  };
-
   useEffect(() => {
+    const fetchMessages = (category = 'inbox') => {
+      fetchMessagesByCategory(category);
+    };
+
     setIsChecked(false);
     setCheckedMessages('');
     fetchMessages(category);
-  }, [category]);
+
+    if (appErrors.type === 'server') {
+      errorToaster(appErrors.message);
+    }
+
+    return () => fetchMessages(category);
+  }, [appErrors.message, appErrors.type, category, fetchMessagesByCategory]);
 
   return (
     <div className="messages-container">
@@ -79,8 +78,8 @@ const MessageList = ({ category }) => {
       <List className="message-list">
         {isLoading ? (
           <Loader />
-        ) : messages.length > 0 ? (
-          messages.map(message => (
+        ) : messagesList.length > 0 ? (
+          messagesList.map(message => (
             <ListItem key={message.id} className="message-item">
               <Checkbox
                 className="message-checkbox"
@@ -103,4 +102,19 @@ const MessageList = ({ category }) => {
   );
 };
 
-export default MessageList;
+const mapStateToProps = ({ loader, messages, appErrors }) => ({
+  isLoading: loader.isLoading,
+  messagesList: messages.messagesList,
+  appErrors
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchMessagesByCategory: data => {
+    dispatch(fetchMessagesByCategory(data));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MessageList);
